@@ -52,6 +52,7 @@
             android:gravity="left|center"
             android:padding="6dp"
             android:text="Camera"
+            android:onClick="startCamera"
             android:textColor="#000"
             android:textStyle="bold" />
 

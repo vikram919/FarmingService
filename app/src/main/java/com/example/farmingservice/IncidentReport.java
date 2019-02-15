@@ -1,11 +1,16 @@
 package com.example.farmingservice;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -15,6 +20,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -32,21 +40,14 @@ import okhttp3.Response;
 public class IncidentReport extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 1;
+    private static final int CAPTURE_IMAGE = 2;
     private ImageView loadedImage;
-    public static final MediaType JSON
-            = MediaType.get("application/json; charset=utf-8");
-    OkHttpClient client = new OkHttpClient();
-    private Button sendButton;
-    private static final String CURRENT_TIME_ZONE_ID = "Europe/Berlin";
-    public static final String SERVER_ADDRESS = "https://hackday.genie-enterprise.com/incident";
-    private String encodedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_incident_report);
         loadedImage = (ImageView) findViewById(R.id.imageview);
-        sendButton = (Button) findViewById(R.id.sendToServer);
     }
 
     public void startGalleryIntent(View view) {
@@ -58,18 +59,11 @@ public class IncidentReport extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
-    public void post(View view) throws IOException {
-        Payload payload = new Payload("My tractor is broken!!", 109.19, 102.2, "1736-4746", "1874-4748", createCurrentTimeStamp(), encodedImage);
-        Log.i("test payload: ", payload.toString());
-        RequestBody body = RequestBody.create(JSON, payload.getString());
-        Request request = new Request.Builder()
-                .url(SERVER_ADDRESS)
-                .post(body)
-                .build();
-        new MyAsyncTask().execute(request);
-        Intent requestSentActivity = new Intent(this, RequestSentActivity.class);
-        startActivity(requestSentActivity);
-
+    public void startCamera(View view) {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(cameraIntent, CAPTURE_IMAGE);
+        }
     }
 
     @Override
@@ -78,46 +72,23 @@ public class IncidentReport extends AppCompatActivity {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
-                    Uri selectedImage = data.getData();
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
-                        loadedImage.setImageBitmap(bitmap);
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
-                        byte[] byteArray = byteArrayOutputStream.toByteArray();
-                        byteArrayOutputStream.close();
-                        this.encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                        sendButton.setVisibility(View.VISIBLE);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    Intent requestSentActivity = new Intent(this, RequestSentActivity.class);
+                    requestSentActivity.putExtra("imageData", extras);
+                    startActivity(requestSentActivity);
                 }
             }
         }
-    }
 
-    class MyAsyncTask extends AsyncTask<Request, Void, Response> {
-
-        @Override
-        protected Response doInBackground(Request... requests) {
-            Response response = null;
-            try {
-                response = client.newCall(requests[0]).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (requestCode == CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Uri selectedImage = data.getData();
+                    Intent requestSentActivity = new Intent(this, RequestSentActivity.class);
+                    requestSentActivity.putExtra("imageData", extras);
+                    startActivity(requestSentActivity);
+                }
             }
-            return response;
         }
-
-        @Override
-        protected void onPostExecute(Response response) {
-            super.onPostExecute(response);
-            // do nothing
-        }
-    }
-
-    public static String createCurrentTimeStamp() {
-        return Instant.now().atZone(ZoneId.of(CURRENT_TIME_ZONE_ID)).withFixedOffsetZone().toString();
     }
 }

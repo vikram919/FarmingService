@@ -2,7 +2,6 @@ package com.example.farmingservice;
 
 import android.util.Log;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 
 import java.time.Instant;
@@ -14,6 +13,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Data
 public class Payload {
     private String description;
     private double latitude;
@@ -34,17 +34,12 @@ public class Payload {
     }
 
     public String getString() {
-        String result = "{\n" +
-                " \"date\": \"2019-02-15T18:27:11.814Z\",\n" +
-                " \"description\": \"string\",\n" +
-                " \"id\": \"string\",\n" +
-                " \"image\":\"" +imageData+"\",\n" +
-                " \"latitude\":"+ 123.09+",\n" +
-                " \"longitude\":"+ 124.09+",\n" +
-                " \"machineId\": \"string\",\n" +
-                " \"oraganizationId\": \"string\"\n" +
-                "}";
+        String result;
+
+        Gson gson = new Gson();
+        result = gson.toJson(this);
         Log.i("Payload", result);
+
         return result;
     }
 }
