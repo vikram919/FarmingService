@@ -72,6 +72,8 @@ public class IncidentReport extends AppCompatActivity {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
+                    Uri selectedImage = data.getData();
+                    extras.putString("uri", selectedImage.toString());
                     Intent requestSentActivity = new Intent(this, RequestSentActivity.class);
                     requestSentActivity.putExtra("imageData", extras);
                     startActivity(requestSentActivity);
@@ -83,7 +85,6 @@ public class IncidentReport extends AppCompatActivity {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
-                    Uri selectedImage = data.getData();
                     Intent requestSentActivity = new Intent(this, RequestSentActivity.class);
                     requestSentActivity.putExtra("imageData", extras);
                     startActivity(requestSentActivity);

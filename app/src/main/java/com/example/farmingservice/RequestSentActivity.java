@@ -54,7 +54,18 @@ public class RequestSentActivity extends AppCompatActivity {
         linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
         textView = (TextView) findViewById(R.id.textView);
         Bundle bundle = getIntent().getBundleExtra("imageData");
-        Bitmap bitmap = (Bitmap) bundle.get("data");
+        String imageUriString = bundle.getString("uri");
+        Bitmap bitmap = null;
+        if (imageUriString == null) {
+            bitmap = (Bitmap) bundle.get("data");
+        } else {
+            try {
+                Uri selectedImage = Uri.parse(bundle.getString("uri"));
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             imageView.setImageBitmap(bitmap);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
