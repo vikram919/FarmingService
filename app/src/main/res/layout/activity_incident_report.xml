@@ -8,39 +8,72 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="350dp"
         android:layout_marginTop="50dp"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="60dp"
-            android:text="List of your machines"
-            android:textColor="#111"
-            android:textStyle="bold" />
-        <CheckBox
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/machineType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
+            <ImageButton
+                android:id="@+id/cancelMachineType"
+                android:onClick="onClearMachineName"
+                android:visibility="invisible"
+                android:src="@drawable/icons8_delete_50"
+                android:scaleType="fitXY"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="100dp"
-            android:text="Row Crop Tractor" />
-        <CheckBox
-            android:layout_width="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/machinePartType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
+            <ImageButton
+                android:id="@+id/cancelMachinePartType"
+                android:onClick="onClearMachinePartName"
+                android:visibility="invisible"
+                android:src="@drawable/icons8_delete_50"
+                android:scaleType="fitXY"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </LinearLayout>
+        <!-- Editext for Search -->
+        <EditText
+            android:id="@+id/inputSearch"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="100dp"
-            android:text="Utility Tractor" />
-
-
-
+            android:hint="Search your machines.."
+            android:inputType="textVisiblePassword" />
+        <!-- List View -->
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="70dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <Button
@@ -50,9 +83,9 @@
             android:drawableLeft="@drawable/baseline_camera_alt_24"
             android:drawablePadding="6dp"
             android:gravity="left|center"
+            android:onClick="startCamera"
             android:padding="6dp"
             android:text="Camera"
-            android:onClick="startCamera"
             android:textColor="#000"
             android:textStyle="bold" />
 
@@ -70,30 +103,4 @@
             android:textColor="#000"
             android:textStyle="bold" />
     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageview"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginBottom="100dp"/>
-
-        <Button
-            android:id="@+id/sendToServer"
-            android:onClick="post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginLeft="20dp"
-            android:text="Send Report"
-            android:visibility="invisible" />
-    </LinearLayout>
-
 </LinearLayout>

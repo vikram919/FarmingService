@@ -15,11 +15,27 @@
             android:layout_width="match_parent"
             android:layout_height="400dp" />
         <TextView
-            android:text="Report sent to cloud!!!"
             android:id="@+id/textView"
+            android:scaleType="fitCenter"
             android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/ok"
+            android:layout_width="101dp"
+            android:layout_height="100dp"
+            android:layout_margin="100dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_ok_48"
+            android:visibility="invisible" />
+        <ImageView
+            android:id="@+id/notOk"
+            android:layout_width="101dp"
+            android:layout_height="100dp"
+            android:layout_margin="100dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_not_ok_red_48"
+            android:visibility="invisible" />
     </FrameLayout>
 
 
@@ -35,10 +51,9 @@
             android:layout_height="50dp" />
 
         <ImageButton
+            android:background="@drawable/icons8_email_send_480"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:onClick="post"/>
     </LinearLayout>
-
-
 </LinearLayout>

@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ColorSpace;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -44,6 +47,7 @@ public class RequestSentActivity extends AppCompatActivity {
     private String encodedImage;
     private LinearLayout linearLayout;
     private TextView textView;
+    private ImageView okImage;
 
     @SuppressLint("WrongThread")
     @Override
@@ -53,6 +57,7 @@ public class RequestSentActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageview);
         linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
         textView = (TextView) findViewById(R.id.textView);
+        okImage = (ImageView) findViewById(R.id.ok);
         Bundle bundle = getIntent().getBundleExtra("imageData");
         String imageUriString = bundle.getString("uri");
         Bitmap bitmap = null;
@@ -69,7 +74,7 @@ public class RequestSentActivity extends AppCompatActivity {
         try {
             imageView.setImageBitmap(bitmap);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 10, byteArrayOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 2, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             byteArrayOutputStream.close();
             this.encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -96,7 +101,19 @@ public class RequestSentActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) {
             super.onPostExecute(response);
-            // do nothing
+            if (response.isSuccessful()) {
+                textView.setText("Your report has been recevied!");
+                textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                textView.setTextColor(Color.GREEN);
+                textView.setVisibility(View.VISIBLE);
+                okImage.setVisibility(View.VISIBLE);
+                okImage.bringToFront();
+            } if (!response.isSuccessful()) {
+                textView.setText("Sending report failed, please try again!");
+                textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                textView.setTextColor(Color.RED);
+                textView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -114,6 +131,5 @@ public class RequestSentActivity extends AppCompatActivity {
         new MyAsyncTask().execute(request);
         linearLayout.setVisibility(View.INVISIBLE);
         imageView.setVisibility(View.INVISIBLE);
-        textView.setVisibility(View.VISIBLE);
     }
 }

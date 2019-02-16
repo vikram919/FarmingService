@@ -18,4 +18,9 @@ public class MainActivity extends AppCompatActivity {
         Intent incidentIntent = new Intent(MainActivity.this, IncidentReport.class);
         startActivity(incidentIntent);
     }
+
+    public void startIncidentTracker(View view) {
+        Intent incidentTracker = new Intent(MainActivity.this, IncidentTracker.class);
+        startActivity(incidentTracker);
+    }
 }
