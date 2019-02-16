@@ -19,10 +19,32 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"></WebView>
     <TextView
+        android:id="@+id/estimatedArrivalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/distanceFromDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/personalName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"/>
+    <TextView
         android:id="@+id/statusOverView"
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"/>
+    <Button
+        android:onClick="refreshPersonnelnfo"
+        android:textStyle="bold"
+        android:layout_margin="20dp"
+        android:text="Refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
